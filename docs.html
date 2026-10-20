@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Документация — ProjectHelper</title>
+<style>
+  :root{
+    --bg:#0d0f12;--bg2:#14181d;--panel:#1a1f26;--line:#2a313a;
+    --text:#e6e9ec;--muted:#8a939e;--accent:#ff7a00;--accent2:#ffb300;
+    --mono:'Consolas','Courier New',monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);color:var(--text);
+    font-family:'Segoe UI',Arial,sans-serif;line-height:1.6;
+    background-image:
+      linear-gradient(rgba(255,122,0,.03) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,122,0,.03) 1px,transparent 1px);
+    background-size:40px 40px;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(13,15,18,.92);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:2px;font-size:18px}
+  .logo-mark{
+    width:34px;height:34px;border:2px solid var(--accent);
+    display:grid;place-items:center;font-family:var(--mono);
+    color:var(--accent);font-size:16px;transform:rotate(45deg);
+  }
+  .logo-mark span{transform:rotate(-45deg)}
+  .nav-links{display:flex;gap:28px;font-size:14px;color:var(--muted)}
+  .nav-links a:hover{color:var(--accent)}
+  .btn{
+    display:inline-block;padding:12px 26px;font-weight:700;font-size:14px;
+    letter-spacing:1px;text-transform:uppercase;border:2px solid var(--accent);
+    color:var(--accent);transition:.2s;cursor:pointer;background:transparent;
+  }
+  .btn:hover{background:var(--accent);color:#0d0f12}
+  .btn-fill{background:var(--accent);color:#0d0f12}
+  .btn-fill:hover{background:var(--accent2);border-color:var(--accent2)}
+
+  /* ДВУХКОЛОНОЧНЫЙ МАКЕТ */
+  .docs-layout{
+    display:grid;grid-template-columns:260px 1fr;gap:48px;
+    padding:48px 0 90px;align-items:start;
+  }
+
+  /* БОКОВОЕ ОГЛАВЛЕНИЕ */
+  .toc{
+    position:sticky;top:92px;
+    border:1px solid var(--line);background:var(--bg2);padding:24px;
+    font-size:14px;
+  }
+  .toc h4{
+    font-family:var(--mono);font-size:11px;letter-spacing:2px;
+    color:var(--accent);margin-bottom:16px;text-transform:uppercase;
+  }
+  .toc ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+  .toc a{color:var(--muted);display:block;padding:4px 0;transition:.2s}
+  .toc a:hover{color:var(--accent);padding-left:6px}
+  .toc .sub{padding-left:16px;font-size:13px}
+
+  /* КОНТЕНТ */
+  .doc h1{font-size:clamp(30px,4vw,46px);font-weight:900;letter-spacing:-.5px;margin-bottom:16px}
+  .doc .lead{color:var(--muted);font-size:17px;max-width:720px;margin-bottom:48px}
+  .doc section{padding:0 0 48px;border-bottom:1px solid var(--line);margin-bottom:48px}
+  .doc section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+  .doc h2{
+    font-size:26px;font-weight:900;margin-bottom:18px;
+    display:flex;align-items:center;gap:14px;
+  }
+  .doc h2 .n{
+    font-family:var(--mono);font-size:13px;color:var(--accent);
+    border:1px solid var(--line);padding:4px 10px;
+  }
+  .doc h3{font-size:18px;margin:28px 0 12px;font-weight:700}
+  .doc p{color:var(--muted);margin-bottom:14px;max-width:800px}
+  .doc ul,.doc ol{margin:0 0 18px 22px;color:var(--muted);max-width:800px}
+  .doc li{margin-bottom:8px}
+  .doc code{
+    font-family:var(--mono);background:var(--bg2);color:var(--accent);
+    padding:2px 7px;font-size:.9em;border:1px solid var(--line);
+  }
+  .doc pre{
+    background:var(--bg2);border:1px solid var(--line);padding:20px;
+    overflow-x:auto;margin-bottom:18px;
+  }
+  .doc pre code{background:none;border:none;padding:0;color:var(--text)}
+  .doc .note{
+    border-left:3px solid var(--accent);background:var(--panel);
+    padding:16px 20px;margin:18px 0;color:var(--muted);font-size:14px;
+  }
+  .doc .note b{color:var(--text)}
+  .doc table{width:100%;border-collapse:collapse;margin:18px 0;font-size:14px}
+  .doc th,.doc td{
+    border:1px solid var(--line);padding:10px 14px;text-align:left;
+  }
+  .doc th{background:var(--bg2);font-family:var(--mono);font-size:12px;letter-spacing:1px;color:var(--accent)}
+  .doc td{color:var(--muted)}
+
+  footer{padding:40px 0;color:var(--muted);font-size:13px;border-top:1px solid var(--line)}
+  .foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+
+  @media(max-width:900px){
+    .docs-layout{grid-template-columns:1fr;gap:32px}
+    .toc{position:static}
+    .nav-links{display:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="index.html" class="logo">
+      <div class="logo-mark"><span>P</span></div>
+      PROJECTHELPER
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#features">Возможности</a>
+      <a href="index.html#inside">Состав</a>
+      <a href="docs.html">Документация</a>
+      <a href="license.html">Лицензия</a>
+      <a href="index.html#faq">FAQ</a>
+    </nav>
+    <a href="index.html#download" class="btn btn-fill">Скачать</a>
+  </div>
+</header>
+
+<div class="wrap docs-layout">
+
+  <!-- ОГЛАВЛЕНИЕ -->
+  <aside class="toc">
+    <h4>Содержание</h4>
+    <ul>
+      <li><a href="#overview">Обзор</a></li>
+      <li><a href="#install">Установка</a></li>
+      <li><a href="#interface">Интерфейс</a></li>
+      <li><a href="#calc">Калькуляторы</a></li>
+      <li><a href="#norms">Нормативная база</a></li>
+      <li><a href="#refs">Справочники</a></li>
+      <li><a href="#reports">Отчёты</a></li>
+      <li><a href="#projects">Проекты</a></li>
+      <li><a href="#settings">Настройки</a></li>
+      <li><a href="#faq-link">FAQ</a></li>
+    </ul>
+  </aside>
+
+  <!-- КОНТЕНТ -->
+  <main class="doc">
+
+    <h1>Документация ProjectHelper</h1>
+    <p class="lead">
+      Руководство пользователя: как установить приложение, разобраться
+      в интерфейсе и работать с модулями.
+    </p>
+
+    <!-- ОБЗОР -->
+    <section id="overview">
+      <h2><span class="n">01</span>Обзор</h2>
+      <p>
+        <b>ProjectHelper</b> — настольное приложение для проектировщиков,
+        объединяющее расчётные инструменты, нормативную базу и справочники
+        в одном окне. Работает офлайн, данные хранятся локально.
+      </p>
+      <p>Ключевые принципы:</p>
+      <ul>
+        <li><b>Модульность</b> — каждая функция это отдельный модуль, подключаемый к оболочке.</li>
+        <li><b>Локальность</b> — никаких обязательных облачных сервисов.</li>
+        <li><b>Скорость</b> — поиск по нормативной базе и расчёты выполняются мгновенно.</li>
+      </ul>
+      <div class="note">
+        <b>Системные требования:</b> Windows 10/11 (64-bit) или Linux (deb/rpm),
+        4 ГБ ОЗУ, 500 МБ на диске. Java устанавливать отдельно не нужно — она встроена.
+      </div>
+    </section>
+
+    <!-- УСТАНОВКА -->
+    <section id="install">
+      <h2><span class="n">02</span>Установка</h2>
+      <h3>Windows</h3>
+      <ol>
+        <li>Скачайте установщик <code>ProjectHelper-setup.exe</code> со страницы загрузки.</li>
+        <li>Запустите его и следуйте шагам мастера.</li>
+        <li>После установки запустите приложение из меню «Пуск».</li>
+      </ol>
+      <h3>Linux</h3>
+      <pre><code>sudo dpkg -i projecthelper_1.0_amd64.deb
+sudo apt --fix-broken install   # при необходимости зависимостей</code></pre>
+      <div class="note">
+        <b>Первый запуск:</b> приложение создаст локальную базу данных
+        в папке пользователя и предложит выбрать тему оформления.
+      </div>
+    </section>
+
+    <!-- ИНТЕРФЕЙС -->
+    <section id="interface">
+      <h2><span class="n">03</span>Интерфейс</h2>
+      <p>Окно приложения разделено на две зоны:</p>
+      <ul>
+        <li><b>Слева</b> — сайдбар с навигацией по модулям (Расчёты, Нормативы, Справочники, Документы, Проекты, Настройки).</li>
+        <li><b>Справа</b> — рабочая область, куда загружается выбранный модуль.</li>
+      </ul>
+      <p>Сверху расположена панель с названием текущего модуля и кнопкой возврата на главную (дашборд с плитками).</p>
+      <table>
+        <tr><th>Элемент</th><th>Назначение</th></tr>
+        <tr><td>Сайдбар</td><td>Быстрый переход между модулями</td></tr>
+        <tr><td>Дашборд</td><td>Стартовый экран с плитками всех функций</td></tr>
+        <tr><td>Хлебные крошки</td><td>Показывают текущее расположение</td></tr>
+      </table>
+    </section>
+
+    <!-- КАЛЬКУЛЯТОРЫ -->
+    <section id="calc">
+      <h2><span class="n">04</span>Калькуляторы</h2>
+      <p>Модуль содержит набор расчётных инструментов. Каждый калькулятор — форма ввода слева и результат с предпросмотром справа.</p>
+      <h3>Как выполнить расчёт</h3>
+      <ol>
+        <li>Выберите калькулятор из списка.</li>
+        <li>Заполните поля (единицы измерения подставляются по умолчанию).</li>
+        <li>Нажмите «Рассчитать» — результат появится в правой части.</li>
+        <li>Нажмите «Сохранить в проект», чтобы привязать расчёт к текущему проекту.</li>
+      </ol>
+      <h3>Доступные калькуляторы</h3>
+      <table>
+        <tr><th>Название</th><th>Назначение</th></tr>
+        <tr><td>Теплотехника</td><td>Сопротивление теплопередаче, теплопотери</td></tr>
+        <tr><td>Конструкции</td><td>Расчёт сечений на прочность и устойчивость</td></tr>
+        <tr><td>Материалы</td><td>Расход бетона, стяжки, арматуры</td></tr>
+        <tr><td>Конвертер</td><td>Перевод единиц измерения</td></tr>
+      </table>
+      <div class="note">
+        <b>Совет:</b> история расчётов хранится автоматически — её можно открыть
+        из модуля «Проекты».
+      </div>
+    </section>
+
+    <!-- НОРМАТИВНАЯ БАЗА -->
+    <section id="norms">
+      <h2><span class="n">05</span>Нормативная база</h2>
+      <p>Поиск по СП, ГОСТ и СНиП. Поддерживается два режима:</p>
+      <ul>
+        <li><b>Быстрый поиск</b> — по номеру документа или ключевым словам.</li>
+        <li><b>Семантический поиск</b> — по смыслу запроса (например, «как посчитать прогиб» найдёт нужный пункт).</li>
+      </ul>
+      <h3>Работа с документами</h3>
+      <ol>
+        <li>Введите запрос в строку поиска.</li>
+        <li>Выберите документ из результатов — откроется текст с подсветкой совпадений.</li>
+        <li>Нажмите «В избранное», чтобы закрепить документ на главной.</li>
+      </ol>
+      <div class="note">
+        <b>Важно:</b> в карточке каждого документа указана дата актуализации.
+        Перед сдачей проекта сверяйтесь с официальным источником.
+      </div>
+    </section>
+
+    <!-- СПРАВОЧНИКИ -->
+    <section id="refs">
+      <h2><span class="n">06</span>Справочники</h2>
+      <p>Таблицы значений и сортаменты: металлопрокат, трубы, единицы измерения, плотности материалов.</p>
+      <p>Данные можно фильтровать и копировать в буфер обмена или экспортировать в CSV.</p>
+    </section>
+
+    <!-- ОТЧЁТЫ -->
+    <section id="reports">
+      <h2><span class="n">07</span>Отчёты</h2>
+      <p>Результаты расчётов можно оформить в виде документа:</p>
+      <ul>
+        <li><b>PDF</b> — для печати и приложения к пояснительной записке.</li>
+        <li><b>Word (.docx)</b> — для дальнейшего редактирования.</li>
+      </ul>
+      <p>Отчёт включает исходные данные, формулы, результат и ссылки на использованные нормативы.</p>
+      <div class="note">
+        <b>Совет:</b> шаблон отчёта можно настроить в разделе «Настройки → Отчёты»
+        (логотип организации, шрифт, поля).
+      </div>
+    </section>
+
+    <!-- ПРОЕКТЫ -->
+    <section id="projects">
+      <h2><span class="n">08</span>Проекты</h2>
+      <p>Каждый проект — это папка с сохранёнными расчётами, заметками и прикреплёнными документами.</p>
+      <ol>
+        <li>Создайте проект на дашборде («Новый проект»).</li>
+        <li>Привязывайте расчёты к проекту кнопкой «Сохранить в проект».</li>
+        <li>Экспортируйте проект целиком в архив для передачи коллеге.</li>
+      </ol>
+    </section>
+
+    <!-- НАСТРОЙКИ -->
+    <section id="settings">
+      <h2><span class="n">09</span>Настройки</h2>
+      <table>
+        <tr><th>Раздел</th><th>Что настраивается</th></tr>
+        <tr><td>Общие</td><td>Язык, тема (тёмная/светлая), единицы по умолчанию</td></tr>
+        <tr><td>Отчёты</td><td>Шаблон, логотип, шрифт, поля</td></tr>
+        <tr><td>База данных</td><td>Путь к файлу базы, резервное копирование</td></tr>
+        <tr><td>Обновления</td><td>Автопроверка версий, канал обновлений</td></tr>
+      </table>
+    </section>
+
+    <!-- FAQ LINK -->
+    <section id="faq-link">
+      <h2><span class="n">10</span>Вопросы</h2>
+      <p>Не нашли ответ? Посмотрите <a href="index.html#faq" style="color:var(--accent)">раздел FAQ</a> на главной странице или напишите нам через форму обратной связи.</p>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  <div class="wrap foot">
+    <a href="index.html" class="logo" style="font-size:14px">
+      <div class="logo-mark" style="width:26px;height:26px;font-size:12px"><span>P</span></div>
+      PROJECTHELPER
+    </a>
+    <div style="display:flex;gap:20px">
+      <a href="docs.html" style="color:var(--muted)">Документация</a>
+      <a href="license.html" style="color:var(--muted)">Лицензия</a>
+    </div>
+    <div>© 2026 ProjectHelper. Инструмент проектировщика.</div>
+  </div>
+</footer>
+
+</body>
+</html>

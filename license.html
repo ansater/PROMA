@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Лицензия — ProjectHelper</title>
+<style>
+  :root{
+    --bg:#0d0f12;--bg2:#14181d;--panel:#1a1f26;--line:#2a313a;
+    --text:#e6e9ec;--muted:#8a939e;--accent:#ff7a00;--accent2:#ffb300;
+    --mono:'Consolas','Courier New',monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);color:var(--text);
+    font-family:'Segoe UI',Arial,sans-serif;line-height:1.6;
+    background-image:
+      linear-gradient(rgba(255,122,0,.03) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,122,0,.03) 1px,transparent 1px);
+    background-size:40px 40px;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+
+  /* ШАПКА */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(13,15,18,.92);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:2px;font-size:18px}
+  .logo-mark{
+    width:34px;height:34px;border:2px solid var(--accent);
+    display:grid;place-items:center;font-family:var(--mono);
+    color:var(--accent);font-size:16px;transform:rotate(45deg);
+  }
+  .logo-mark span{transform:rotate(-45deg)}
+  .nav-links{display:flex;gap:28px;font-size:14px;color:var(--muted)}
+  .nav-links a:hover{color:var(--accent)}
+  .btn{
+    display:inline-block;padding:12px 26px;font-weight:700;font-size:14px;
+    letter-spacing:1px;text-transform:uppercase;border:2px solid var(--accent);
+    color:var(--accent);transition:.2s;cursor:pointer;background:transparent;
+  }
+  .btn:hover{background:var(--accent);color:#0d0f12}
+  .btn-fill{background:var(--accent);color:#0d0f12}
+  .btn-fill:hover{background:var(--accent2);border-color:var(--accent2)}
+
+  /* ЗАГОЛОВОК СТРАНИЦЫ */
+  .page-head{
+    padding:72px 0 48px;border-bottom:1px solid var(--line);
+  }
+  .page-head .num{
+    font-family:var(--mono);color:var(--accent);font-size:13px;letter-spacing:3px;
+  }
+  .page-head h1{
+    font-size:clamp(32px,5vw,54px);font-weight:900;letter-spacing:-.5px;
+    margin:12px 0 16px;
+  }
+  .page-head p{color:var(--muted);max-width:680px;font-size:17px}
+
+  /* МАКЕТ */
+  .lic-layout{
+    display:grid;grid-template-columns:260px 1fr;gap:48px;
+    padding:48px 0 90px;align-items:start;
+  }
+
+  /* ОГЛАВЛЕНИЕ */
+  .toc{
+    position:sticky;top:92px;
+    border:1px solid var(--line);background:var(--bg2);padding:24px;
+    font-size:14px;
+  }
+  .toc h4{
+    font-family:var(--mono);font-size:11px;letter-spacing:2px;
+    color:var(--accent);margin-bottom:16px;text-transform:uppercase;
+  }
+  .toc ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+  .toc a{color:var(--muted);display:block;padding:4px 0;transition:.2s}
+  .toc a:hover{color:var(--accent);padding-left:6px}
+
+  /* КОНТЕНТ */
+  .lic h2{
+    font-size:26px;font-weight:900;margin-bottom:18px;
+    display:flex;align-items:center;gap:14px;
+  }
+  .lic h2 .n{
+    font-family:var(--mono);font-size:13px;color:var(--accent);
+    border:1px solid var(--line);padding:4px 10px;
+  }
+  .lic section{
+    padding:0 0 48px;border-bottom:1px solid var(--line);margin-bottom:48px;
+  }
+  .lic section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+  .lic h3{font-size:18px;margin:28px 0 12px;font-weight:700}
+  .lic p{color:var(--muted);margin-bottom:14px;max-width:800px}
+  .lic ul,.lic ol{margin:0 0 18px 22px;color:var(--muted);max-width:800px}
+  .lic li{margin-bottom:8px}
+  .lic b{color:var(--text)}
+  .lic .note{
+    border-left:3px solid var(--accent);background:var(--panel);
+    padding:16px 20px;margin:18px 0;color:var(--muted);font-size:14px;
+  }
+  .lic .note b{color:var(--text)}
+
+  /* СВОДКА */
+  .summary{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:2px;background:var(--line);border:1px solid var(--line);margin-bottom:24px;
+  }
+  .summary-item{background:var(--bg2);padding:24px}
+  .summary-item .lbl{
+    font-family:var(--mono);font-size:11px;letter-spacing:2px;
+    color:var(--accent);margin-bottom:8px;
+  }
+  .summary-item .val{font-size:16px;font-weight:700}
+  .summary-item p{font-size:13px;color:var(--muted);margin-top:6px;margin-bottom:0}
+
+  /* ТАРИФЫ */
+  .plans{
+    display:grid;grid-template-columns:1fr 1fr;gap:2px;
+    background:var(--line);border:1px solid var(--line);margin:24px 0;
+  }
+  .plan{background:var(--bg2);padding:32px 28px;display:flex;flex-direction:column}
+  .plan.featured{background:var(--panel);border-top:3px solid var(--accent)}
+  .plan .plan-name{
+    font-family:var(--mono);font-size:12px;letter-spacing:2px;
+    color:var(--accent);margin-bottom:12px;text-transform:uppercase;
+  }
+  .plan .price{font-size:32px;font-weight:900;margin-bottom:4px}
+  .plan .price span{font-size:14px;color:var(--muted);font-weight:400}
+  .plan .plan-desc{font-size:13px;color:var(--muted);margin-bottom:22px}
+  .plan ul{list-style:none;margin:0 0 26px;padding:0;flex-grow:1}
+  .plan li{
+    font-size:14px;color:var(--muted);padding:9px 0;
+    border-bottom:1px solid var(--line);display:flex;gap:10px;
+  }
+  .plan li::before{content:"✓";color:var(--accent);font-weight:700}
+  .plan li.no::before{content:"—";color:#4a525c}
+  .plan li.no{color:#4a525c}
+  .plan .btn{width:100%;text-align:center}
+
+  /* ТАБЛИЦА БИБЛИОТЕК */
+  .lic table{width:100%;border-collapse:collapse;margin:18px 0;font-size:14px}
+  .lic th,.lic td{border:1px solid var(--line);padding:10px 14px;text-align:left}
+  .lic th{background:var(--bg2);font-family:var(--mono);font-size:12px;letter-spacing:1px;color:var(--accent)}
+  .lic td{color:var(--muted)}
+
+  footer{padding:40px 0;color:var(--muted);font-size:13px;border-top:1px solid var(--line)}
+  .foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+
+  @media(max-width:900px){
+    .lic-layout{grid-template-columns:1fr;gap:32px}
+    .toc{position:static}
+    .nav-links{display:none}
+    .plans{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<!-- ШАПКА -->
+<header>
+  <div class="wrap nav">
+    <a href="index.html" class="logo">
+      <div class="logo-mark"><span>P</span></div>
+      PROJECTHELPER
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#features">Возможности</a>
+      <a href="index.html#inside">Состав</a>
+      <a href="docs.html">Документация</a>
+      <a href="license.html" style="color:var(--accent)">Лицензия</a>
+      <a href="index.html#faq">FAQ</a>
+    </nav>
+    <a href="index.html#download" class="btn btn-fill">Скачать</a>
+  </div>
+</header>
+
+<!-- ЗАГОЛОВОК -->
+<div class="page-head">
+  <div class="wrap">
+    <div class="num">// ЛИЦЕНЗИЯ И УСЛОВИЯ</div>
+    <h1>Лицензионное соглашение</h1>
+    <p>
+      Условия использования ProjectHelper: что можно делать бесплатно,
+      что входит в подписку и как мы обращаемся с вашими данными.
+    </p>
+  </div>
+</div>
+
+<div class="wrap lic-layout">
+
+  <!-- ОГЛАВЛЕНИЕ -->
+  <aside class="toc">
+    <h4>Содержание</h4>
+    <ul>
+      <li><a href="#summary">Кратко</a></li>
+      <li><a href="#terms">Условия использования</a></li>
+      <li><a href="#plans">Тарифы</a></li>
+      <li><a href="#data">Данные и приватность</a></li>
+      <li><a href="#thirdparty">Сторонние компоненты</a></li>
+      <li><a href="#disclaimer">Отказ от гарантий</a></li>
+      <li><a href="#contacts">Контакты</a></li>
+    </ul>
+  </aside>
+
+  <!-- КОНТЕНТ -->
+  <main class="lic">
+
+    <!-- КРАТКО -->
+    <section id="summary">
+      <h2><span class="n">01</span>Кратко</h2>
+      <div class="summary">
+        <div class="summary-item">
+          <div class="lbl">БАЗОВАЯ ВЕРСИЯ</div>
+          <div class="val">Бесплатно</div>
+          <p>Калькуляторы, справочники, поиск по нормативам</p>
+        </div>
+        <div class="summary-item">
+          <div class="lbl">РАСШИРЕННЫЕ МОДУЛИ</div>
+          <div class="val">По подписке</div>
+          <p>Генератор отчётов, синхронизация, приоритетная поддержка</p>
+        </div>
+        <div class="summary-item">
+          <div class="lbl">ДАННЫЕ</div>
+          <div class="val">Локально</div>
+          <p>Ваши расчёты и проекты хранятся на вашем компьютере</p>
+        </div>
+        <div class="summary-item">
+          <div class="lbl">ОФЛАЙН</div>
+          <div class="val">Да</div>
+          <p>Работает без интернета после установки</p>
+        </div>
+      </div>
+      <div class="note">
+        <b>Важно:</b> это типовой шаблон лицензии. Перед публикацией приложения
+        рекомендуется показать текст юристу, знакомому с законодательством вашей страны.
+      </div>
+    </section>
+
+    <!-- УСЛОВИЯ -->
+    <section id="terms">
+      <h2><span class="n">02</span>Условия использования</h2>
+
+      <h3>2.1. Предоставление лицензии</h3>
+      <p>
+        Вам предоставляется неисключительная лицензия на использование
+        программы ProjectHelper в личных и профессиональных целях
+        в объёме, соответствующем выбранному тарифу.
+      </p>
+
+      <h3>2.2. Что разрешено</h3>
+      <ul>
+        <li>Устанавливать приложение на компьютеры, которыми вы владеете или управляете.</li>
+        <li>Использовать результаты расчётов в своих проектах без ограничений.</li>
+        <li>Создавать резервные копии базы данных и файлов приложения.</li>
+        <li>Изучать работу приложения в образовательных целях.</li>
+      </ul>
+
+      <h3>2.3. Что запрещено</h3>
+      <ul>
+        <li>Распространять установочные файлы приложения третьим лицам без разрешения правообладателя.</li>
+        <li>Декомпилировать, модифицировать или обходить защиту лицензии.</li>
+        <li>Перепродавать доступ к расширенным модулям или сдавать его в аренду.</li>
+        <li>Удалять или скрывать уведомления об авторских правах.</li>
+      </ul>
+
+      <h3>2.4. Обновления</h3>
+      <p>
+        Обновления в пределах текущей мажорной версии предоставляются бесплатно.
+        Переход на новую мажорную версию может требовать отдельной оплаты
+        (для платных тарифов).
+      </p>
+
+      <h3>2.5. Прекращение действия</h3>
+      <p>
+        Лицензия действует бессрочно для базовой версии. Для подписки —
+        до окончания оплаченного периода. При нарушении условий лицензия
+        может быть отозвана.
+      </p>
+    </section>
+
+    <!-- ТАРИФЫ -->
+    <section id="plans">
+      <h2><span class="n">03</span>Тарифы</h2>
+      <p>Базовые функции доступны бесплатно. Расширенные возможности — по подписке.</p>
+
+      <div class="plans">
+        <!-- БЕСПЛАТНЫЙ -->
+        <div class="plan">
+          <div class="plan-name">Базовая</div>
+          <div class="price">0 ₽ <span>/ навсегда</span></div>
+          <div class="plan-desc">Для знакомства и повседневных задач</div>
+          <ul>
+            <li>Все калькуляторы</li>
+            <li>Справочники и сортаменты</li>
+            <li>Быстрый поиск по нормативам</li>
+            <li>Локальная база проектов</li>
+            <li class="no">Семантический поиск</li>
+            <li class="no">Генератор отчётов PDF/Word</li>
+            <li class="no">Синхронизация между устройствами</li>
+          </ul>
+          <a href="index.html#download" class="btn">Скачать</a>
+        </div>
+
+        <!-- ПЛАТНЫЙ -->
+        <div class="plan featured">
+          <div class="plan-name">Pro</div>
+          <div class="price">690 ₽ <span>/ мес</span></div>
+          <div class="plan-desc">Для активной работы над проектами</div>
+          <ul>
+            <li>Всё из «Базовой»</li>
+            <li>Семантический поиск по нормативам</li>
+            <li>Генератор отчётов PDF/Word</li>
+            <li>Шаблоны отчётов с логотипом</li>
+            <li>Синхронизация между устройствами</li>
+            <li>Приоритетная поддержка</li>
+            <li>Доступ к новым модулям первыми</li>
+          </ul>
+          <a href="#contacts" class="btn btn-fill">Оформить</a>
+        </div>
+      </div>
+
+      <div class="note">
+        <b>Для организаций:</b> возможна корпоративная лицензия с общим счётом
+        и управлением местами. Напишите нам для расчёта.
+      </div>
+    </section>
+
+    <!-- ДАННЫЕ -->
+    <section id="data">
+      <h2><span class="n">04</span>Данные и приватность</h2>
+      <ul>
+        <li>Все расчёты, проекты и заметки хранятся <b>локально</b> в базе SQLite на вашем компьютере.</li>
+        <li>Мы не передаём содержимое ваших проектов на серверы.</li>
+        <li>Для проверки обновлений приложение может отправлять версию и тип ОС — без персональных данных.</li>
+        <li>При оформлении подписки обрабатываются только e-mail и платёжные данные (через платёжного провайдера).</li>
+        <li>Резервное копирование базы — ответственность пользователя.</li>
+      </ul>
+      <div class="note">
+        <b>Совет:</b> настройте автоматическое резервное копирование базы
+        в разделе «Настройки → База данных».
+      </div>
+    </section>
+
+    <!-- СТОРОННИЕ КОМПОНЕНТЫ -->
+    <section id="thirdparty">
+      <h2><span class="n">05</span>Сторонние компоненты</h2>
+      <p>Приложение использует открытые библиотеки. Их лицензии сохраняются.</p>
+      <table>
+        <tr><th>Компонент</th><th>Назначение</th><th>Лицензия</th></tr>
+        <tr><td>JavaFX</td><td>Графический интерфейс</td><td>GPL v2 + Classpath Exception</td></tr>
+        <tr><td>SQLite JDBC</td><td>Локальная база данных</td><td>Apache 2.0</td></tr>
+        <tr><td>Jackson</td><td>Сериализация JSON</td><td>Apache 2.0</td></tr>
+        <tr><td>OpenPDF / iText</td><td>Генерация PDF-отчётов</td><td>LGPL / AGPL</td></tr>
+      </table>
+      <p>Полные тексты лицензий доступны в папке <code>licenses/</code> установленного приложения.</p>
+    </section>
+
+    <!-- ОТКАЗ ОТ ГАРАНТИЙ -->
+    <section id="disclaimer">
+      <h2><span class="n">06</span>Отказ от гарантий</h2>
+      <p>
+        Приложение предоставляется «как есть». Мы стремимся к точности расчётов
+        и актуальности нормативной базы, но <b>не гарантируем</b> отсутствие ошибок.
+      </p>
+      <ul>
+        <li>Результаты расчётов носят справочный характер.</li>
+        <li>Перед использованием в проектной документации проверяйте результаты вручную.</li>
+        <li>Нормативные документы в базе могут не отражать последние изменения — сверяйтесь с официальными источниками.</li>
+        <li>Правообладатель не несёт ответственности за ущерб, связанный с использованием приложения.</li>
+      </ul>
+    </section>
+
+    <!-- КОНТАКТЫ -->
+    <section id="contacts">
+      <h2><span class="n">07</span>Контакты</h2>
+      <p>По вопросам лицензирования, корпоративных тарифов и сотрудничества:</p>
+      <ul>
+        <li>E-mail: <b>license@projecthelper.example</b></li>
+        <li>Форма обратной связи: <a href="index.html#contact" style="color:var(--accent)">на главной странице</a></li>
+        <li>Юридический адрес: указывается в договоре для организаций</li>
+      </ul>
+      <div class="note">
+        <b>Дата последнего обновления:</b> 20 октября 2026 г.
+        Актуальная версия лицензии всегда доступна на этой странице.
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ФУТЕР -->
+<footer>
+  <div class="wrap foot">
+    <a href="index.html" class="logo" style="font-size:14px">
+      <div class="logo-mark" style="width:26px;height:26px;font-size:12px"><span>P</span></div>
+      PROJECTHELPER
+    </a>
+    <div style="display:flex;gap:20px">
+      <a href="docs.html" style="color:var(--muted)">Документация</a>
+      <a href="license.html" style="color:var(--muted)">Лицензия</a>
+    </div>
+    <div>© 2026 ProjectHelper. Инструмент проектировщика.</div>
+  </div>
+</footer>
+
+</body>
+</html>
